@@ -1,12 +1,11 @@
-import { h, ref, render, toRef, watch } from 'vue';
-import { OpenPosition } from '@/interfaces';
+import type {Component, ComponentPublicInstance, ComputedRef, Ref, Slots} from 'vue';
+import {h, ref, render, toRef, watch} from 'vue';
+import type {ComponentRef, InlineOptions, VueEmit} from '@/interfaces';
+import {OpenPosition} from '@/interfaces';
 
-import { unrefElement } from '@/utils/util';
-import { MenuPlacement } from '@/constants';
-
-import type { Component, ComponentPublicInstance, ComputedRef, Ref, Slots } from 'vue';
-import type { ComponentRef, InlineOptions, VueEmit } from '@/interfaces';
-import type { AllPropsType } from '@/props';
+import {unrefElement} from '@/utils/util';
+import {MenuPlacement} from '@/constants';
+import type {AllPropsType} from '@/props';
 
 /**
  * Extracted code from the main component, used for calculating the position of the menu
@@ -38,7 +37,7 @@ export const usePosition = ({
         top: '0',
         left: '0',
     });
-    const openOnTop = ref(false);
+    const openOnTop = ref(props.placeOnTop);
     const centered = toRef(props, 'teleportCenter');
 
     watch(centered, () => {
@@ -172,6 +171,9 @@ export const usePosition = ({
     };
 
     const getMenuPlacement = (): MenuPlacement => {
+        if(props.placeOnTop) {
+            return MenuPlacement.top
+        }
         const inputEl = unrefElement(inputRef);
         if (inputEl) {
             const { height: menuHeight } = menuRect.value;
